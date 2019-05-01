@@ -17,7 +17,7 @@ columnNames = ['Date', 'Address', 'Name', 'Class', 'Archetype', 'Expansion', 'De
 source = requests.get('https://www.heartharena.com/profile/krippers')
 soup = BeautifulSoup(source.text, 'lxml')
 addList = soup.find('table', class_='arena-runs-table')
-df = pd.read_csv('/home/chris/Desktop/KrippHistory.csv')
+df = pd.read_csv('C:\\Users\\chris\\Google Drive\\Python\\KrippHistory.csv')
 addresses = df['Address'].tolist()
 tableInAdd = addList.find_all('tr', class_='classification')
 tableInAdd.reverse()
@@ -86,4 +86,4 @@ for link in tableInAdd:
         print('Deck', i, 'added.')
         i += 1
 
-df.to_csv('/home/chris/Desktop/KrippHistory.csv', index=False)
+df.to_csv('C:\\Users\\chris\\Google Drive\\Python\\KrippHistory.csv', index=False)

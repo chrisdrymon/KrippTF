@@ -8,7 +8,7 @@ from tensorflow.keras import layers
 
 #os.environ['CUDA_VISIBLE_DEVICES'] = ''
 
-df = pd.read_csv('/home/chris/Desktop/KrippHistory.csv')
+df = pd.read_csv('C:\\Users\\chris\\Google Drive\\Python\\KrippHistory.csv')
 df = df.drop(columns='Bucket2')
 
 # Create the unique card dictionary
@@ -31,7 +31,7 @@ for card in noDups:
     cardDic[card] = j
     j += 1
 
-pickleOut = open('/home/chris/Desktop/oldDeckDic.pkl', 'wb')
+pickleOut = open('C:\\Users\\chris\\Google Drive\\Python\\oldDeckDic.pkl', 'wb')
 pickle.dump(cardDic, pickleOut, pickle.HIGHEST_PROTOCOL)
 pickleOut.close()
 
@@ -105,7 +105,7 @@ class ModelSaver(tf.keras.callbacks.Callback):
             self.tempBest = worst
             if self.tempBest > self.veryBest:
                 self.veryBest = self.tempBest
-                self.model.save('/home/chris/Desktop/KrippModel.h5', overwrite=True)
+                self.model.save('C:\\Users\\chris\\Google Drive\\Python\\KrippModel.h5', overwrite=True)
                 print('\n\nModel saved at epoch', epoch, 'with', self.veryBest, 'accuracy.\n')
         if self.tempBest - logs['val_acc'] > 0.025 and epoch > 30:
             self.model.stop_training = True
@@ -129,7 +129,7 @@ count = 0
 columnNames = ['Batch Size', 'L1 Nodes', 'L1 Regularization', 'L1 Dropout', 'L2 Nodes', 'L2 Regularization',
                'L2 Dropout', 'Learning Rate', 'Accuracy']
 
-oldDf = pd.read_csv('/home/chris/Desktop/hyperparams.csv')
+oldDf = pd.read_csv('C:\\Users\\chris\\Google Drive\\Python\\hyperparams.csv')
 
 while count < 100:
     bs1 = random.randint(1, 9)
@@ -179,4 +179,4 @@ while count < 100:
 
     count += 1
 
-oldDf.to_csv('/home/chris/Desktop/hyperparams.csv', index=False)
+oldDf.to_csv('C:\\Users\\chris\\Google Drive\\Python\\hyperparams.csv', index=False)

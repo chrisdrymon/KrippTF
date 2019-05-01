@@ -5,14 +5,14 @@ from bs4 import BeautifulSoup
 import requests
 import os
 
-os.environ['CUDA_VISIBLE_DEVICES'] = ''
+#os.environ['CUDA_VISIBLE_DEVICES'] = ''
 
 # Load the model, card dictionary, and address
-model = tf.keras.models.load_model('/home/chris/Desktop/NModel6044.h5')
-pickleIn = open('/home/chris/Desktop/NDict6044.pkl', 'rb')
+model = tf.keras.models.load_model('C:\\Users\\chris\\Google Drive\\Python\\NModel6044.h5')
+pickleIn = open('C:\\Users\\chris\\Google Drive\\Python\\NDict6044.pkl', 'rb')
 cardDict = pickle.load(pickleIn)
 address = 'https://www.heartharena.com/arena-run/ud96ou'
-lettuce = 1163
+lettuce = 1212
 
 # Preparing dictionaries to convert data into integers. Later they will be turned to one-hots.
 classDict = {'Druid': 0, 'Hunter': 1, 'Mage': 2, 'Paladin': 3, 'Priest': 4, 'Rogue': 5, 'Shaman': 6,

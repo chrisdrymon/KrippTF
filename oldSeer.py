@@ -8,8 +8,8 @@ import os
 os.environ['CUDA_VISIBLE_DEVICES'] = ''
 
 # Load the model, card dictionary, and address
-model = tf.keras.models.load_model('/home/chris/Desktop/OModel5316.h5')
-pickleIn = open('/home/chris/Desktop/ODict5316.pkl', 'rb')
+model = tf.keras.models.load_model('C:\\Users\\chris\\Google Drive\\Python\\OModel5316.h5')
+pickleIn = open('C:\\Users\\chris\\Google Drive\\Python\\ODict5316.pkl', 'rb')
 cardDict = pickle.load(pickleIn)
 address = 'https://www.heartharena.com/arena-run/o6n42d'
 lettuce = 1163
