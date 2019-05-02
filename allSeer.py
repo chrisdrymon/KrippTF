@@ -8,11 +8,15 @@ import os
 os.environ['CUDA_VISIBLE_DEVICES'] = ''
 
 # Load the model, card dictionary, and address
-model = tf.keras.models.load_model('C:\\Users\\chris\\Google Drive\\Python\\NModel6139.h5')
-pickleIn = open('C:\\Users\\chris\\Google Drive\\Python\\NDict6139.pkl', 'rb')
-cardDict = pickle.load(pickleIn)
-address = 'https://www.heartharena.com/arena-run/ud96ou'
-lettuce = 1212
+simpleModel = tf.keras.models.load_model('C:\\Users\\chris\\Google Drive\\Python\\RoS5279.h5')
+oModel = tf.keras.models.load_model('C:\\Users\\chris\\Google Drive\\Python\\OModel5316.h5')
+oPickleIn = open('C:\\Users\\chris\\Google Drive\\Python\\ODict5316.pkl', 'rb')
+oCardDict = pickle.load(oPickleIn)
+nModel = tf.keras.models.load_model('C:\\Users\\chris\\Google Drive\\Python\\NModel6139.h5')
+nPickleIn = open('C:\\Users\\chris\\Google Drive\\Python\\NDict6139.pkl', 'rb')
+nCardDict = pickle.load(nPickleIn)
+address = 'https://www.heartharena.com/arena-run/vw70zv'
+lettuce = 1248
 
 # Preparing dictionaries to convert data into integers. Later they will be turned to one-hots.
 classDict = {'Druid': 0, 'Hunter': 1, 'Mage': 2, 'Paladin': 3, 'Priest': 4, 'Rogue': 5, 'Shaman': 6,
@@ -31,6 +35,8 @@ gameList = newSoup.find('ul', class_='matches-list')
 hsClass = newSoup.title.text.split()[0]
 classTens = [0] * 9
 classTens[classDict[hsClass]] = 1
+simpleClassTens = [0] * 9
+simpleClassTens[classDict[hsClass]] = 1
 
 # Archetype
 archetype = newSoup.find('header', class_='deck-archetype-name').find('span')
@@ -59,24 +65,44 @@ for card in cardList.find_all('span', class_='quantity'):
     quantList.append(card.text)
 
 # Form the card tensor
-cardTens = [0]*len(cardDict)
+oCardTens = [0] * len(oCardDict)
+nCardTens = [0] * len(nCardDict)
 i = 0
 while i < len(deckList):
     try:
-        cardTens[cardDict[deckList[i]]] = quantList[i]
+        oCardTens[oCardDict[deckList[i]]] = quantList[i]
+        nCardTens[nCardDict[deckList[i]]] = quantList[i]
     except KeyError:
         print('One card missing.')
         pass
     i += 1
 
 # Combine data them into a single tensor.
-combinedTens = classTens + archTens + expanTens
-combinedTens.append(deckScore)
-combinedTens = combinedTens + cardTens
+simpleClassTens.append(deckScore)
+simpleTens = simpleClassTens + archTens + expanTens
 
-predicTens = [[combinedTens]]
-prediction = model.predict(predicTens)
-bet = (max(prediction[0])-.5)*2*lettuce
+oCombinedTens = classTens + archTens + expanTens
+oCombinedTens.append(deckScore)
+oCombinedTens = oCombinedTens + oCardTens
+
+nCombinedTens = classTens + archTens + expanTens
+nCombinedTens.append(deckScore)
+nCombinedTens = nCombinedTens + nCardTens
+
+simplePredicTens = [[simpleTens]]
+simplePrediction = simpleModel.predict(simplePredicTens)
+oPredicTens = [[oCombinedTens]]
+oPrediction = oModel.predict(oPredicTens)
+nPredicTens = [[nCombinedTens]]
+nPrediction = nModel.predict(nPredicTens)
+sBet = (max(simplePrediction[0]) - .5) * 2 * lettuce
+oBet = (max(oPrediction[0]) - .5) * 2 * lettuce
+nBet = (max(nPrediction[0]) - .5) * 2 * lettuce
+
 print(archetype, hsClass, score)
-print(prediction[0])
-print("Bet", int(bet), "lettuce.")
+print('\nSimple MechaKripp prediction:', simplePrediction[0])
+print('Bet', int(sBet), 'lettuce.')
+print('\nMechaKripp paradigm prediction:', oPrediction[0])
+print('Bet', int(oBet), 'lettuce.')
+print('\nStreamLabs paradigm prediction:', nPrediction[0])
+print('Bet', int(nBet), 'lettuce.')
