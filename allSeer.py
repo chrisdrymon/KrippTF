@@ -15,8 +15,8 @@ oCardDict = pickle.load(oPickleIn)
 nModel = tf.keras.models.load_model('C:\\Users\\chris\\Google Drive\\Python\\NModel6139.h5')
 nPickleIn = open('C:\\Users\\chris\\Google Drive\\Python\\NDict6139.pkl', 'rb')
 nCardDict = pickle.load(nPickleIn)
-address = 'https://www.heartharena.com/arena-run/vw70zv'
-lettuce = 1248
+address = 'https://www.heartharena.com/arena-run/aames7'
+lettuce = 1250
 
 # Preparing dictionaries to convert data into integers. Later they will be turned to one-hots.
 classDict = {'Druid': 0, 'Hunter': 1, 'Mage': 2, 'Paladin': 3, 'Priest': 4, 'Rogue': 5, 'Shaman': 6,

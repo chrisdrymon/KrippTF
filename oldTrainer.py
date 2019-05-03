@@ -134,17 +134,22 @@ oldDf = pd.read_csv('C:\\Users\\chris\\Google Drive\\Python\\hyperparams.csv')
 while count < 100:
     bs1 = random.randint(1, 9)
     bs2 = random.randint(0, 2)
-    batchSize = random.randint(1, 500)
-    l1Nodes = random.randint(40, 500)
+    batchSize = random.randint(1, 2000)
+    l1Nodes = random.randint(40, 1000)
     l1Reg1 = random.randint(0, 9)
     l1Reg2 = random.randint(-5, -1)
     l1Reg = l1Reg1*10**l1Reg2
     l1Dropout = random.randint(0, 80)/100
-    l2Nodes = random.randint(4, 500)
+    l2Nodes = random.randint(4, 1000)
     l2Dropout = random.randint(0, 80)/100
     l2Reg1 = random.randint(0, 9)
     l2Reg2 = random.randint(-5, -1)
     l2Reg = l2Reg1*10**l2Reg2
+    l3Nodes = random.randint(4, 1000)
+    l3Dropout = random.randint(0, 80)/100
+    l3Reg1 = random.randint(0, 9)
+    l3Reg2 = random.randint(-5, -1)
+    l3Reg = l3Reg1*10**l3Reg2
     lr1 = random.randint(1, 9)
     lr2 = random.randint(-6, -1)
     lr = lr1*10**lr2
@@ -152,10 +157,10 @@ while count < 100:
     tf.keras.backend.clear_session()
     graph = tf.Graph()
     with tf.Session(graph=graph):
-        model = tf.keras.Sequential([layers.Dense(l1Nodes, kernel_regularizer=tf.keras.regularizers.l2(l1Reg),
+        model = tf.keras.Sequential([layers.Dense(l1Nodes, kernel_regularizer=tf.keras.regularizers.l1(l1Reg),
                                                   activation='relu', input_shape=(len(combinedTens),)),
                                      layers.Dropout(l1Dropout),
-                                     layers.Dense(l2Nodes, kernel_regularizer=tf.keras.regularizers.l2(l2Reg),
+                                     layers.Dense(l2Nodes, kernel_regularizer=tf.keras.regularizers.l1(l2Reg),
                                                   activation='relu'),
                                      layers.Dropout(l2Dropout),
                                      layers.Dense(3, activation='softmax')])
