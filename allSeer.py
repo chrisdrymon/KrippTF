@@ -12,10 +12,10 @@ simpleModel = tf.keras.models.load_model('C:\\Users\\chris\\Google Drive\\Python
 oModel = tf.keras.models.load_model('C:\\Users\\chris\\Google Drive\\Python\\OModel5316.h5')
 oPickleIn = open('C:\\Users\\chris\\Google Drive\\Python\\ODict5316.pkl', 'rb')
 oCardDict = pickle.load(oPickleIn)
-nModel = tf.keras.models.load_model('C:\\Users\\chris\\Google Drive\\Python\\NModel6139.h5')
-nPickleIn = open('C:\\Users\\chris\\Google Drive\\Python\\NDict6139.pkl', 'rb')
+nModel = tf.keras.models.load_model('C:\\Users\\chris\\Google Drive\\Python\\NModel6151.h5')
+nPickleIn = open('C:\\Users\\chris\\Google Drive\\Python\\NDict6151.pkl', 'rb')
 nCardDict = pickle.load(nPickleIn)
-address = 'https://www.heartharena.com/arena-run/aames7'
+address = 'https://www.heartharena.com/arena-run/y3yq15'
 lettuce = 1250
 
 # Preparing dictionaries to convert data into integers. Later they will be turned to one-hots.

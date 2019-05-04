@@ -6,7 +6,7 @@ import os
 import pickle
 from tensorflow.keras import layers
 
-#os.environ['CUDA_VISIBLE_DEVICES'] = ''
+os.environ['CUDA_VISIBLE_DEVICES'] = ''
 
 df = pd.read_csv('C:\\Users\\chris\\Google Drive\\Python\\KrippHistory.csv')
 df = df.drop(columns='Bucket1')
@@ -31,7 +31,7 @@ for card in noDups:
     cardDic[card] = j
     j += 1
 
-pickleOut = open('C:\\Users\\chris\\Google Drive\\Python\\newDeckDic.pkl', 'wb')
+pickleOut = open('C:\\Users\\chris\\Google Drive\\Python\\winsDeckDic.pkl', 'wb')
 pickle.dump(cardDic, pickleOut, pickle.HIGHEST_PROTOCOL)
 pickleOut.close()
 
@@ -78,9 +78,8 @@ for row in df.itertuples():
     preNump.append(combinedTens)
 
     # Convert labels to hots and add to the list of labels.
-    labelHot = [0, 0, 0]
-    labelHot[bucketDict[row[69]]] = 1
-    preLabels.append(labelHot)
+    label = row[68]
+    preLabels.append(label)
 
 print('Input', len(combinedTens))
 trainData = np.array(preNump)
@@ -89,26 +88,26 @@ trainLabels = np.array(preLabels)
 
 # Custom Callback that Saves Model and Stop Training
 class ModelSaver(tf.keras.callbacks.Callback):
-    veryBest = 0
+    veryBest = 1000
     prevLoss = 0
     repLoss = 0
 
     def on_train_begin(self, logs=None):
-        self.tempBest = 0
+        self.tempBest = 1000
 
     def on_epoch_end(self, epoch, logs=None):
         # Saves the best model
-        if logs['val_acc'] > logs['acc']:
-            worst = logs['acc']
+        if logs['val_mean_squared_error'] < logs['mean_squared_error']:
+            worst = logs['mean_squared_error']
         else:
-            worst = logs['val_acc']
-        if worst > self.tempBest:
+            worst = logs['val_mean_squared_error']
+        if worst < self.tempBest:
             self.tempBest = worst
-            if self.tempBest > self.veryBest:
+            if self.tempBest < self.veryBest:
                 self.veryBest = self.tempBest
-                self.model.save('C:\\Users\\chris\\Google Drive\\Python\\newModel.h5', overwrite=True)
-                print('\n\nModel saved at epoch', epoch, 'with', self.veryBest, 'accuracy.\n')
-        if self.tempBest - logs['val_acc'] > 0.025 and epoch > 30:
+                self.model.save('C:\\Users\\chris\\Google Drive\\Python\\winsModel.h5', overwrite=True)
+                print('\n\nModel saved at epoch', epoch, 'with', self.veryBest, 'MSE.\n')
+        if logs['val_mean_squared_error'] - self.tempBest > 1 and epoch > 30:
             self.model.stop_training = True
             print('\n\nTraining stopped at epoch', epoch, '\n')
         elif logs['loss'] == self.prevLoss:
@@ -126,13 +125,12 @@ class ModelSaver(tf.keras.callbacks.Callback):
 
 modelSaver = ModelSaver()
 
+
 count = 0
 columnNames = ['Batch Size', 'L1 Nodes', 'L1 Regularization', 'L1 Dropout', 'L2 Nodes', 'L2 Regularization',
                'L2 Dropout', 'Learning Rate', 'Accuracy']
 
-# oldDf = pd.read_csv('C:\\Users\\chris\\Google Drive\\Python\\newhparams.csv')
-
-while count < 100:
+while count < 3:
     bs1 = random.randint(1, 9)
     bs2 = random.randint(0, 2)
     batchSize = random.randint(1, 500)
@@ -159,25 +157,17 @@ while count < 100:
                                      layers.Dense(l2Nodes, kernel_regularizer=tf.keras.regularizers.l2(l2Reg),
                                                   activation='relu'),
                                      layers.Dropout(l2Dropout),
-                                     layers.Dense(3, activation='softmax')])
+                                     layers.Dense(1)])
 
-        optimizer = tf.keras.optimizers.Adam(lr=lr)
+        optimizer = tf.keras.optimizers.RMSprop(0.001)
 
         model.compile(optimizer=optimizer,
-                      loss='categorical_crossentropy',
-                      metrics=['accuracy'])
+                      loss='mean_squared_error',
+                      metrics=['mean_squared_error'])
 
         callBacks = [modelSaver, tf.keras.callbacks.EarlyStopping(monitor='loss', patience=20,
                                                                   restore_best_weights=False)]
 
-        model.fit(x=trainData, y=trainLabels, batch_size=batchSize, epochs=5000, callbacks=callBacks,
-                  validation_split=0.2, shuffle=True)
-
-    modelSpecs = pd.DataFrame([batchSize, l1Nodes, l1Reg, l1Dropout, l2Nodes, l2Reg, l2Dropout, lr,
-                               modelSaver.tempBest]).T
-    modelSpecs.columns = columnNames
-#    oldDf = oldDf.append(modelSpecs, ignore_index=True, sort=False)
+        model.fit(x=trainData, y=trainLabels, batch_size=batchSize, epochs=20, validation_split=0.2, shuffle=True)
 
     count += 1
-
-# oldDf.to_csv('C:\\Users\\chris\\Google Drive\\Python\\newhparams.csv', index=False)
