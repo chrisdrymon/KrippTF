@@ -15,8 +15,11 @@ oCardDict = pickle.load(oPickleIn)
 nModel = tf.keras.models.load_model('C:\\Users\\chris\\Google Drive\\Python\\NModel6151.h5')
 nPickleIn = open('C:\\Users\\chris\\Google Drive\\Python\\NDict6151.pkl', 'rb')
 nCardDict = pickle.load(nPickleIn)
-address = 'https://www.heartharena.com/arena-run/y3yq15'
-lettuce = 1250
+wModel = tf.keras.models.load_model('C:\\Users\\chris\\Google Drive\\Python\\WModel9306.h5')
+wPickleIn = open('C:\\Users\\chris\\Google Drive\\Python\\WDict9306.pkl', 'rb')
+wCardDict = pickle.load(wPickleIn)
+address = 'https://www.heartharena.com/arena-run/3pung5'
+lettuce = 1270
 
 # Preparing dictionaries to convert data into integers. Later they will be turned to one-hots.
 classDict = {'Druid': 0, 'Hunter': 1, 'Mage': 2, 'Paladin': 3, 'Priest': 4, 'Rogue': 5, 'Shaman': 6,
@@ -67,11 +70,13 @@ for card in cardList.find_all('span', class_='quantity'):
 # Form the card tensor
 oCardTens = [0] * len(oCardDict)
 nCardTens = [0] * len(nCardDict)
+wCardTens = [0] * len(wCardDict)
 i = 0
 while i < len(deckList):
     try:
         oCardTens[oCardDict[deckList[i]]] = quantList[i]
         nCardTens[nCardDict[deckList[i]]] = quantList[i]
+        wCardTens[wCardDict[deckList[i]]] = quantList[i]
     except KeyError:
         print('One card missing.')
         pass
@@ -89,17 +94,25 @@ nCombinedTens = classTens + archTens + expanTens
 nCombinedTens.append(deckScore)
 nCombinedTens = nCombinedTens + nCardTens
 
+wCombinedTens = classTens + archTens + expanTens
+wCombinedTens.append(deckScore)
+wCombinedTens = wCombinedTens + wCardTens
+
 simplePredicTens = [[simpleTens]]
 simplePrediction = simpleModel.predict(simplePredicTens)
 oPredicTens = [[oCombinedTens]]
 oPrediction = oModel.predict(oPredicTens)
 nPredicTens = [[nCombinedTens]]
 nPrediction = nModel.predict(nPredicTens)
+wPredicTens = [[wCombinedTens]]
+wPrediction = wModel.predict(wPredicTens)
+
 sBet = (max(simplePrediction[0]) - .5) * 2 * lettuce
 oBet = (max(oPrediction[0]) - .5) * 2 * lettuce
 nBet = (max(nPrediction[0]) - .5) * 2 * lettuce
 
 print(archetype, hsClass, score)
+print('Predicting', wPrediction[0][0], 'wins.')
 print('\nSimple MechaKripp prediction:', simplePrediction[0])
 print('Bet', int(sBet), 'lettuce.')
 print('\nMechaKripp paradigm prediction:', oPrediction[0])

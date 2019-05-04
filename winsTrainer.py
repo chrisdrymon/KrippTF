@@ -89,8 +89,6 @@ trainLabels = np.array(preLabels)
 # Custom Callback that Saves Model and Stop Training
 class ModelSaver(tf.keras.callbacks.Callback):
     veryBest = 1000
-    prevLoss = 0
-    repLoss = 0
 
     def on_train_begin(self, logs=None):
         self.tempBest = 1000
@@ -109,28 +107,19 @@ class ModelSaver(tf.keras.callbacks.Callback):
                 print('\n\nModel saved at epoch', epoch, 'with', self.veryBest, 'MSE.\n')
         if logs['val_mean_squared_error'] - self.tempBest > 1 and epoch > 30:
             self.model.stop_training = True
-            print('\n\nTraining stopped at epoch', epoch, '\n')
-        elif logs['loss'] == self.prevLoss:
-            self.repLoss += 1
-            if self.repLoss == 5:
-                self.model.stop_training = True
-                print('\n\nTraining stopped at epoch', epoch, '\n')
-        else:
-            self.prevLoss = logs['loss']
-            self.repLoss = 0
+            print('\n\nTraining stopped to overfitting at epoch', epoch, '\n')
 
     def on_train_end(self, logs=None):
-        print('\nBest Model saved at', self.veryBest, 'accuracy.\n')
+        print('\nBest Model saved at', self.veryBest, 'MSE.\n')
 
 
 modelSaver = ModelSaver()
-
 
 count = 0
 columnNames = ['Batch Size', 'L1 Nodes', 'L1 Regularization', 'L1 Dropout', 'L2 Nodes', 'L2 Regularization',
                'L2 Dropout', 'Learning Rate', 'Accuracy']
 
-while count < 3:
+while count < 100:
     bs1 = random.randint(1, 9)
     bs2 = random.randint(0, 2)
     batchSize = random.randint(1, 500)
@@ -159,7 +148,7 @@ while count < 3:
                                      layers.Dropout(l2Dropout),
                                      layers.Dense(1)])
 
-        optimizer = tf.keras.optimizers.RMSprop(0.001)
+        optimizer = tf.keras.optimizers.RMSprop(lr)
 
         model.compile(optimizer=optimizer,
                       loss='mean_squared_error',
@@ -168,6 +157,7 @@ while count < 3:
         callBacks = [modelSaver, tf.keras.callbacks.EarlyStopping(monitor='loss', patience=20,
                                                                   restore_best_weights=False)]
 
-        model.fit(x=trainData, y=trainLabels, batch_size=batchSize, epochs=20, validation_split=0.2, shuffle=True)
+        model.fit(x=trainData, y=trainLabels, batch_size=batchSize, epochs=1000, callbacks=callBacks,
+                  validation_split=0.2, shuffle=True)
 
     count += 1
