@@ -18,8 +18,11 @@ nCardDict = pickle.load(nPickleIn)
 wModel = tf.keras.models.load_model('C:\\Users\\chris\\Google Drive\\Python\\WModel9306.h5')
 wPickleIn = open('C:\\Users\\chris\\Google Drive\\Python\\WDict9306.pkl', 'rb')
 wCardDict = pickle.load(wPickleIn)
-address = 'https://www.heartharena.com/arena-run/3pung5'
-lettuce = 1270
+wCModel = tf.keras.models.load_model('C:\\Users\\chris\\Google Drive\\Python\\WCModel1730.h5')
+wCPickleIn = open('C:\\Users\\chris\\Google Drive\\Python\\WCDict1730.pkl', 'rb')
+wCCardDict = pickle.load(wCPickleIn)
+address = 'https://www.heartharena.com/arena-run/9ry2t4'
+lettuce = 1291
 
 # Preparing dictionaries to convert data into integers. Later they will be turned to one-hots.
 classDict = {'Druid': 0, 'Hunter': 1, 'Mage': 2, 'Paladin': 3, 'Priest': 4, 'Rogue': 5, 'Shaman': 6,
@@ -71,12 +74,14 @@ for card in cardList.find_all('span', class_='quantity'):
 oCardTens = [0] * len(oCardDict)
 nCardTens = [0] * len(nCardDict)
 wCardTens = [0] * len(wCardDict)
+wCCardTens = [0] * len(wCCardDict)
 i = 0
 while i < len(deckList):
     try:
         oCardTens[oCardDict[deckList[i]]] = quantList[i]
         nCardTens[nCardDict[deckList[i]]] = quantList[i]
         wCardTens[wCardDict[deckList[i]]] = quantList[i]
+        wCCardTens[wCCardDict[deckList[i]]] = quantList[i]
     except KeyError:
         print('One card missing.')
         pass
@@ -98,6 +103,10 @@ wCombinedTens = classTens + archTens + expanTens
 wCombinedTens.append(deckScore)
 wCombinedTens = wCombinedTens + wCardTens
 
+wCCombinedTens = classTens + archTens + expanTens
+wCCombinedTens.append(deckScore)
+wCCombinedTens = wCCombinedTens + wCCardTens
+
 simplePredicTens = [[simpleTens]]
 simplePrediction = simpleModel.predict(simplePredicTens)
 oPredicTens = [[oCombinedTens]]
@@ -106,6 +115,8 @@ nPredicTens = [[nCombinedTens]]
 nPrediction = nModel.predict(nPredicTens)
 wPredicTens = [[wCombinedTens]]
 wPrediction = wModel.predict(wPredicTens)
+wCPredicTens = [[wCCombinedTens]]
+wCPrediction = wCModel.predict(wCPredicTens)
 
 sBet = (max(simplePrediction[0]) - .5) * 2 * lettuce
 oBet = (max(oPrediction[0]) - .5) * 2 * lettuce
@@ -113,6 +124,27 @@ nBet = (max(nPrediction[0]) - .5) * 2 * lettuce
 
 print(archetype, hsClass, score)
 print('Predicting', wPrediction[0][0], 'wins.')
+print('Win Probabilities:')
+print(' 0:', wCPrediction[0][0])
+print(' 1:', wCPrediction[0][1])
+print(' 2:', wCPrediction[0][2])
+print(' 3:', wCPrediction[0][3])
+print(' 4:', wCPrediction[0][4])
+print(' 5:', wCPrediction[0][5])
+print(' 6:', wCPrediction[0][6])
+print(' 7:', wCPrediction[0][7])
+print(' 8:', wCPrediction[0][8])
+print(' 9:', wCPrediction[0][9])
+print('10:', wCPrediction[0][10])
+print('11:', wCPrediction[0][11])
+print('12:', wCPrediction[0][12])
+print('\n 1-4:', wCPrediction[0][0] + wCPrediction[0][1] + wCPrediction[0][2] + wCPrediction[0][3] + wCPrediction[0][4])
+print(' 5-8:', wCPrediction[0][5] + wCPrediction[0][6] + wCPrediction[0][7] + wCPrediction[0][8])
+print('9-12:', wCPrediction[0][9] + wCPrediction[0][10] + wCPrediction[0][11] + wCPrediction[0][12])
+print(' 1-6:', wCPrediction[0][1] + wCPrediction[0][2] + wCPrediction[0][3] + wCPrediction[0][4] + wCPrediction[0][5] +
+      wCPrediction[0][6])
+print('7-12:', wCPrediction[0][7] + wCPrediction[0][8] + wCPrediction[0][9] + wCPrediction[0][10] + wCPrediction[0][11]
+      + wCPrediction[0][12])
 print('\nSimple MechaKripp prediction:', simplePrediction[0])
 print('Bet', int(sBet), 'lettuce.')
 print('\nMechaKripp paradigm prediction:', oPrediction[0])
