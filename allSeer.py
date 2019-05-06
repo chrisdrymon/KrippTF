@@ -21,8 +21,8 @@ wCardDict = pickle.load(wPickleIn)
 wCModel = tf.keras.models.load_model('C:\\Users\\chris\\Google Drive\\Python\\WCModel1730.h5')
 wCPickleIn = open('C:\\Users\\chris\\Google Drive\\Python\\WCDict1730.pkl', 'rb')
 wCCardDict = pickle.load(wCPickleIn)
-address = 'https://www.heartharena.com/arena-run/9ry2t4'
-lettuce = 1291
+address = 'https://www.heartharena.com/arena-run/qwd667'
+lettuce = 1310
 
 # Preparing dictionaries to convert data into integers. Later they will be turned to one-hots.
 classDict = {'Druid': 0, 'Hunter': 1, 'Mage': 2, 'Paladin': 3, 'Priest': 4, 'Rogue': 5, 'Shaman': 6,
