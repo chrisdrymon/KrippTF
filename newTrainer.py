@@ -6,7 +6,7 @@ import os
 import pickle
 from tensorflow.keras import layers
 
-#os.environ['CUDA_VISIBLE_DEVICES'] = ''
+os.environ['CUDA_VISIBLE_DEVICES'] = ''
 
 df = pd.read_csv('C:\\Users\\chris\\Google Drive\\Python\\KrippHistory.csv')
 df = df.drop(columns='Bucket1')

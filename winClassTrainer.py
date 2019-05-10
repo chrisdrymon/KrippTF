@@ -6,7 +6,7 @@ import os
 import pickle
 from tensorflow.keras import layers
 
-os.environ['CUDA_VISIBLE_DEVICES'] = ''
+#os.environ['CUDA_VISIBLE_DEVICES'] = ''
 
 df = pd.read_csv('C:\\Users\\chris\\Google Drive\\Python\\KrippHistory.csv')
 df = df.drop(columns='Bucket1')
@@ -129,9 +129,9 @@ count = 0
 columnNames = ['Batch Size', 'L1 Nodes', 'L1 Regularization', 'L1 Dropout', 'L2 Nodes', 'L2 Regularization',
                'L2 Dropout', 'Learning Rate', 'Accuracy']
 
-# oldDf = pd.read_csv('C:\\Users\\chris\\Google Drive\\Python\\newhparams.csv')
+oldDf = pd.read_csv('C:\\Users\\chris\\Google Drive\\Python\\wcparams.csv')
 
-while count < 10:
+while count < 200:
     bs1 = random.randint(1, 9)
     bs2 = random.randint(0, 2)
     batchSize = random.randint(1, 500)
@@ -175,8 +175,8 @@ while count < 10:
     modelSpecs = pd.DataFrame([batchSize, l1Nodes, l1Reg, l1Dropout, l2Nodes, l2Reg, l2Dropout, lr,
                                modelSaver.tempBest]).T
     modelSpecs.columns = columnNames
-#    oldDf = oldDf.append(modelSpecs, ignore_index=True, sort=False)
+    oldDf = oldDf.append(modelSpecs, ignore_index=True, sort=False)
 
     count += 1
 
-# oldDf.to_csv('C:\\Users\\chris\\Google Drive\\Python\\newhparams.csv', index=False)
+oldDf.to_csv('C:\\Users\\chris\\Google Drive\\Python\\wcparams.csv', index=False)

@@ -43,10 +43,12 @@ expansion = {'GvG': 0, 'BRM': 1, 'WOG': 2, 'Kara': 3, 'MSG': 4, 'Ungoro': 5, 'KF
              'Boomsday': 9, 'Rumble': 10, 'RoS': 11}
 
 shuffleTens = []
+rowCounter = 0
 
 # Create the tensors
 for row in df.itertuples():
-
+    rowCounter += 1
+    print('Row', rowCounter, "started.")
     # Classes
     classTens = [0] * 9
     classTens[classDict[row[4]]] = 1
@@ -71,6 +73,7 @@ for row in df.itertuples():
                 tempCT = [0] * noDupsLen
                 tempCT[cardDic[row[k]]] = 1
                 shuffleTens.append(tempCT)
+                # print('Deck added to Shuffle Tensor.')
                 counter += 1
         k += 1
 
@@ -79,7 +82,8 @@ for row in df.itertuples():
         # Flatten out the lists
         flatTens = []
         for sublist in shuffleTens:
-            flatTens.append(sublist)
+            flatTens = flatTens + sublist
+
         # Combine data into a single tensor.
         combinedTens = classTens + archTens + expanTens
         combinedTens.append(deckScore)
@@ -93,6 +97,7 @@ for row in df.itertuples():
         labelHot[row[69]] = 1
         preLabels.append(labelHot)
         random.shuffle(shuffleTens)
+
         n += 1
 
 print(len(preLabels), 'decks.')

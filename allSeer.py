@@ -18,11 +18,11 @@ nCardDict = pickle.load(nPickleIn)
 wModel = tf.keras.models.load_model('C:\\Users\\chris\\Google Drive\\Python\\WModel9306.h5')
 wPickleIn = open('C:\\Users\\chris\\Google Drive\\Python\\WDict9306.pkl', 'rb')
 wCardDict = pickle.load(wPickleIn)
-wCModel = tf.keras.models.load_model('C:\\Users\\chris\\Google Drive\\Python\\WCModel1730.h5')
-wCPickleIn = open('C:\\Users\\chris\\Google Drive\\Python\\WCDict1730.pkl', 'rb')
+wCModel = tf.keras.models.load_model('C:\\Users\\chris\\Google Drive\\Python\\WCModel1688.h5')
+wCPickleIn = open('C:\\Users\\chris\\Google Drive\\Python\\WCDict1688.pkl', 'rb')
 wCCardDict = pickle.load(wCPickleIn)
-address = 'https://www.heartharena.com/arena-run/7mxh97'
-lettuce = 1351
+address = 'https://www.heartharena.com/arena-run/49xur1'
+lettuce = 1381
 
 # Preparing dictionaries to convert data into integers. Later they will be turned to one-hots.
 classDict = {'Druid': 0, 'Hunter': 1, 'Mage': 2, 'Paladin': 3, 'Priest': 4, 'Rogue': 5, 'Shaman': 6,
@@ -122,8 +122,15 @@ sBet = (max(simplePrediction[0]) - .5) * 2 * lettuce
 oBet = (max(oPrediction[0]) - .5) * 2 * lettuce
 nBet = (max(nPrediction[0]) - .5) * 2 * lettuce
 
+counter = 1
+predictSum = 0
+while counter < 13:
+    predictSum = predictSum + wCPrediction[0][counter]*counter
+    counter += 1
+
 print(archetype, hsClass, score)
-print('Predicting', wPrediction[0][0], 'wins.')
+print(f'Logistic Prediction: {wPrediction[0][0]:.2f} wins.')
+print(f'Category Prediction: {predictSum:.2f} wins.')
 print('Win Probabilities:')
 print(' 0:', wCPrediction[0][0])
 print(' 1:', wCPrediction[0][1])
@@ -141,8 +148,8 @@ print('12:', wCPrediction[0][12])
 print('\n 1-4:', wCPrediction[0][0] + wCPrediction[0][1] + wCPrediction[0][2] + wCPrediction[0][3] + wCPrediction[0][4])
 print(' 5-8:', wCPrediction[0][5] + wCPrediction[0][6] + wCPrediction[0][7] + wCPrediction[0][8])
 print('9-12:', wCPrediction[0][9] + wCPrediction[0][10] + wCPrediction[0][11] + wCPrediction[0][12])
-print(' 1-6:', wCPrediction[0][1] + wCPrediction[0][2] + wCPrediction[0][3] + wCPrediction[0][4] + wCPrediction[0][5] +
-      wCPrediction[0][6])
+print('\n 1-6:', wCPrediction[0][1] + wCPrediction[0][2] + wCPrediction[0][3] + wCPrediction[0][4] + wCPrediction[0][5]
+      + wCPrediction[0][6])
 print('7-12:', wCPrediction[0][7] + wCPrediction[0][8] + wCPrediction[0][9] + wCPrediction[0][10] + wCPrediction[0][11]
       + wCPrediction[0][12])
 print('\nSimple MechaKripp prediction:', simplePrediction[0])
