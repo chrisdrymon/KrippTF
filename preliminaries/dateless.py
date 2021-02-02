@@ -6,8 +6,6 @@ import random
 from tensorflow.keras import layers, callbacks
 import os
 
-print(tf.VERSION)
-print(tf.keras.__version__)
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 # Preparing dictionaries to convert data into integers. Later they will be turned to one-hots.
@@ -18,7 +16,7 @@ deckType = {'Aggro-Control': 0, 'Attrition': 1, 'Classic Aggro': 2, 'Classic Con
 expansion = {'Vanilla': 0, 'BRM': 1, 'WOG': 2, 'Kara': 3, 'MSG': 4, 'Ungoro': 5, 'KFT': 6, 'KnC': 7, 'Woods': 8,
              'Boomsday': 9, 'Rumble': 10, 'RoS': 11}
 
-df = pd.read_csv('/home/chris/Desktop/KrippDateless.csv', sep=',', header=None)
+df = pd.read_csv(os.path.join('data', 'KrippDateless.csv'), sep=',', header=None)
 df = df.sample(frac=1)
 
 preNump = []
@@ -67,7 +65,7 @@ class CustomModelCheckpoint(tf.keras.callbacks.Callback):
             worst = logs['val_acc']
         if worst > self.best:
             self.best = worst
-            self.model.save('/home/chris/Desktop/KrippModel.h5', overwrite=True)
+            self.model.save(os.path.join('models', 'KrippModel.h5'), overwrite=True)
             print('Model saved at epoch', epoch, 'with', self.best, 'accuracy.')
 
 
@@ -110,8 +108,6 @@ def runnn(fcbk, prenump, prelabels):
                    metrics=['accuracy'])
 
     fcallbacks = [callbacks.EarlyStopping(monitor='val_acc', patience=50), fcbk]
-                 # callbacks.TensorBoard(log_dir='/home/chris/Desktop/KrippLog/20D4DO50D4DO256Bl', write_graph=True,
-                  #                      write_images=True, histogram_freq=1, write_grads=True)]
 
     fthemodel = fmodel.fit(x=ftraindata, y=ftrainlabels, batch_size=fbatchsize, epochs=400, verbose=0,
                            callbacks=fcallbacks, validation_data=(fevaldata, fevallabels), shuffle=True,
@@ -158,7 +154,7 @@ while i < 51:
     samples.append(tempParameters)
     i += 1
 hyperParameters = np.asarray(samples)
-np.savetxt('/home/chris/Desktop/datelessparams.csv', hyperParameters, delimiter=',')
+np.savetxt(os.path.join('data', 'datelessparams.csv'), hyperParameters, delimiter=',')
 print("Best Model:", bestModel)
 print("Layer 1:", bestDense1, "nodes,", bestDropout1 * 100, "% dropout.")
 print("Layer 2:", bestDense2, "nodes,", bestDropout2 * 100, "% dropout.")

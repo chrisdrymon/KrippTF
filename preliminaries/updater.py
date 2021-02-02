@@ -2,6 +2,9 @@ from bs4 import BeautifulSoup
 import requests
 import pandas as pd
 from datetime import datetime
+import os
+
+# This script updates Kripp's arena history with the most recent games.
 
 i = 1
 j = 1
