@@ -8,7 +8,7 @@ wager_maker.py is the final product. Modules in the preliminaries folder were us
 
 # How It Works
 
-Because Kripp used a certain deck-tracking add-on, his deck was immediately uploaded to a website upon completion of the deck draft. This module 1) web-scraped all deck information with Beautiful Soup, 2) processed it through a deep neural network which had been previously trained on Kripparrian's prior gameplay (about 1600 games), and 3) applied the Kelly criterion according to the DNN's confidence level, and ultimately returned an optimal waging strategy.
+Because Kripp used a certain deck-tracking add-on, his deck was immediately uploaded to a website upon completion of the drafting phase. This module 1) web-scraped all deck information with Beautiful Soup, 2) processed it through a deep neural network which had been previously trained on Kripparrian's prior gameplay (about 1600 games), and 3) applied the Kelly criterion according to the DNN's confidence level, and ultimately returned an optimal waging strategy.
 
 # Results & Analysis
 I quickly jumped to the top 10% of currency owners before Kripp stopped playing arena (which occurred soon after making this).
