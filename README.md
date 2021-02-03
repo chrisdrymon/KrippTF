@@ -4,6 +4,8 @@ in-channel currency dubbed "lettuce." Upon him completing the drafting of a deck
 9-12 wins with that deck in that arena run. Winners would have their lettuce wagers doubled. Losers lost their
 wager. This was a project aimed at maximizing lettuce while learning Tensorflow's Keras API.
 
+wager_maker.py is the final product. Modules in the preliminaries folder were used to gather data and create the model that wager_maker uses.
+
 # How It Works
 
 Because Kripp used a certain deck-tracking add-on, his deck was immediately uploaded to a website upon completion of the deck draft. This module 1) web-scraped all deck information with Beautiful Soup, 2) processed it through a deep neural network which had been previously trained on Kripparrian's prior gameplay (about 1600 games), and 3) applied the Kelly criterion according to the DNN's confidence level, and ultimately returned an optimal waging strategy.
