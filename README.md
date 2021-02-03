@@ -17,5 +17,4 @@ An unexpected finding was that most bets were bad ones. For a bet to be placed, 
 
 # Improvements
 If I were to develop this further, I would go to the trouble of [temperature scaling](https://arxiv.org/abs/1706.04599) for more accurate probabilities.
-Kripp, however, doesn't play arena anymore. And as is, it worked well enough to quickly catapult me to the top 10% of
-lettuce holders before he stopped playing. The over-confidence which is usually seen in neural network outputs did not seem to be present in the model that was used.
+Kripp, however, doesn't play arena anymore. And as is, it worked well enough and the over-confidence which is usually seen in neural network outputs was not obvious in the model that was used.
