@@ -41,6 +41,7 @@ class_dict = {'Druid': 0, 'Hunter': 1, 'Mage': 2, 'Paladin': 3, 'Priest': 4, 'Ro
 deck_type = {'Aggro-Control': 0, 'Attrition': 1, 'Classic Aggro': 2, 'Classic Control': 3, 'Mid-Range': 4, 'Tempo': 5}
 expansion = {'Vanilla': 0, 'BRM': 1, 'WOG': 2, 'Kara': 3, 'MSG': 4, 'Ungoro': 5, 'KFT': 6, 'KnC': 7, 'Woods': 8,
              'Boomsday': 9, 'Rumble': 10, 'RoS': 11}
+bracket_dict = {0: '0-4', 1: '5-8', 2: '9-12'}
 
 # Scrape deck information from the URL. The lxml library must be installed even though it is not explicitly imported.
 source = requests.get(address)
@@ -103,8 +104,6 @@ prediction = model.predict(np_combined)
 # Apply the Kelly criterion to determine the optimal wager amount
 wager = (max(prediction[0]) - .5) * 2 * lettuce
 reverse_wager = (.5 - min(prediction[0])) * 2 * lettuce
-
-bracket_dict = {0: '0-4', 1: '5-8', 2: '9-12'}
 
 print('Win Bracket Probabilities:')
 print(f' 0-4: {prediction[0][0]:.02%}')
