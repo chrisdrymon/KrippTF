@@ -11,7 +11,7 @@ wager_maker.py is the final product. Modules in the preliminaries folder were us
 Because Kripp used a certain deck-tracking add-on, his deck was immediately uploaded to a website upon completion of the drafting phase. This module 1) web-scraped all deck information with Beautiful Soup, 2) processed it through a deep neural network which had been previously trained on Kripparrian's prior gameplay (about 1600 games), and 3) applied the Kelly criterion according to the DNN's confidence level, and ultimately returned an optimal waging strategy.
 
 # Results & Analysis
-I quickly jumped to the top 10% of currency owners before Kripp stopped playing arena (which occurred soon after making this).
+There were tens of thousands of currency holders; possibly 100,000+. Among them, I quickly jumped to the top 10% before Kripp stopped playing arena (which occurred soon after making this).
 
 An unexpected finding was that most bets were bad ones. For a bet to be placed, one of the win brackets needed to have a likelihood above 50%. No matter how good or bad a deck draft was, that was an infrequent occurrence. This observation likely gives a degree of quantitative corroboration to player opinion about arena at that time: that success in that game mode was leaning far too much on events outside of player control rather than intelligent deck drafting or skillful play. The most prominent of those events being the random 50/50 of which player got to go first. The player going first in arena mode had a sizable advantage.
 
